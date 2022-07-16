@@ -1,5 +1,8 @@
-# PEPL 
-![PEPL logo prototyp](icon.svg)
+<div style="display: flex; justify-content: center; align-items: center">
+    <img src="icon.svg" width="50%">
+    <h1> PEPL </h1>
+</div>
+<hr>
 
 **Pauls esoteric programming language**
 
