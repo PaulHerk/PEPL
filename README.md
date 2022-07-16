@@ -1,7 +1,5 @@
-<div style="display: flex; justify-content: center; align-items: center">
-    <img src="icon.svg" width="50%">
-    <h1> PEPL </h1>
-</div>
+<h1>PEPL</h1>
+<img src="icon.svg" width="30%" style="float: right">
 <hr>
 
 **Pauls esoteric programming language**
