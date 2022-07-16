@@ -1,4 +1,5 @@
 # PEPL 
+![PEPL logo prototyp](icon.svg)
 
 **Pauls esoteric programming language**
 

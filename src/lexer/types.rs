@@ -10,9 +10,9 @@ pub enum TokenKind {
     BeginIf,
     Else,
     EndIf,
-    StartFor,
-    EndFor,
+    StartLoop,
+    EndLoop,
 }
-pub fn items() -> [char; 9] {
+pub fn break_items() -> [char; 9] {
     ['\\', '+', '-', '>', '<', ',', '?', ':', '|']
 }
