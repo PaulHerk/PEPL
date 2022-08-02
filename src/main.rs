@@ -1,7 +1,7 @@
 use std::fs;
-mod interpreter;
+// mod interpreter;
 mod lexer;
-use interpreter::Interpreter;
+// use interpreter::Interpreter;
 
 pub use crate::lexer::Lexer;
 
@@ -10,6 +10,8 @@ fn main() {
 
     let mut lexer: Lexer = Lexer::new_lexer(file_content);
     let lexer = lexer.lex();
-    let mut interpreter = Interpreter::new_interpreter(lexer);
-    interpreter.interpret();
+    println!("{:?}", lexer);
+    // let mut interpreter = Interpreter::new_interpreter(lexer);
+    // interpreter.interpret();
+    // not yet :)
 }

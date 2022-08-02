@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?> <!-- Created with Vectornator for iOS (http://vectornator.io/) --><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
-<svg xmlns="http://www.w3.org/2000/svg" xml:space="preserve" xmlns:vectornator="http://vectornator.io" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="100%" viewBox="0 0 1024 1024" height="100%">
+<svg xmlns:vectornator="http://vectornator.io" width="100%" xmlns:xlink="http://www.w3.org/1999/xlink" style="fill-rule:nonzero;clip-rule:evenodd;stroke-linecap:round;stroke-linejoin:round;" xml:space="preserve" viewBox="0 0 1024 1024" height="100%" version="1.1" xmlns="http://www.w3.org/2000/svg">
 <metadata>
-<vectornator:setting value="false" key="WDDynamicGuides"/>
-<vectornator:setting key="WDOutlineMode" value="false"/>
-<vectornator:setting key="WDGuidesVisible" value="true"/>
-<vectornator:setting value="false" key="WDSnapToEdges"/>
-<vectornator:setting value="false" key="WDIsolateActiveLayer"/>
-<vectornator:setting key="UndoHistoryDisabled" value="true"/>
 <vectornator:setting key="WDCMYKEnabledKey" value="false"/>
-<vectornator:setting key="WDSnapToPoints" value="false"/>
-<vectornator:setting value="true" key="WDRulersVisible"/>
-<vectornator:setting key="IsTimeLapseWatermarkDisabled" value="false"/>
-<vectornator:setting key="WDDisplayWhiteBackground" value="false"/>
+<vectornator:setting key="UndoHistoryDisabled" value="true"/>
 <vectornator:setting key="WDUnits" value="Pixels"/>
+<vectornator:setting value="false" key="WDOutlineMode"/>
+<vectornator:setting key="WDDynamicGuides" value="false"/>
+<vectornator:setting key="WDRulersVisible" value="true"/>
+<vectornator:setting key="WDDisplayWhiteBackground" value="false"/>
+<vectornator:setting value="true" key="VNDimensionsVisible"/>
+<vectornator:setting value="false" key="IsTimeLapseWatermarkDisabled"/>
+<vectornator:setting key="WDIsolateActiveLayer" value="false"/>
+<vectornator:setting key="WDGuidesVisible" value="true"/>
+<vectornator:setting value="false" key="WDSnapToPoints"/>
+<vectornator:setting key="WDSnapToEdges" value="false"/>
 <vectornator:setting key="VNSnapToGuides" value="true"/>
 <vectornator:setting key="WDSnapToGrid" value="false"/>
-<vectornator:setting value="true" key="VNDimensionsVisible"/>
 </metadata>
 <defs>
-<radialGradient r="340.887" gradientUnits="userSpaceOnUse" gradientTransform="matrix(1 0 0 1 -6.15636 1.15773)" cx="514.824" id="RadialGradient" cy="512">
-<stop stop-color="#887777" offset="0"/>
-<stop offset="1" stop-color="#502525"/>
-</radialGradient>
-<radialGradient id="RadialGradient_2" gradientTransform="matrix(1 0 0 1 -25.5742 -15.4316)" cx="584.448" cy="335.207" r="55.0642" gradientUnits="userSpaceOnUse">
-<stop offset="0" stop-color="#887777"/>
-<stop offset="1" stop-color="#502525"/>
-</radialGradient>
+<linearGradient y1="520.498" x1="169.833" x2="1016.49" gradientUnits="userSpaceOnUse" id="LinearGradient" y2="1151.49" gradientTransform="matrix(0.999998 0 0 0.999998 -11.9495 -8.4972)">
+<stop offset="0.332999" stop-color="#000000"/>
+<stop stop-color="#8d8c8c" offset="0.987648"/>
+</linearGradient>
 </defs>
 <g vectornator:layerName="Layer 1" id="Layer 1">
-<path fill="url(#RadialGradient)" d="M568.646+214.541C616.215+215.9+667.16+246.673+681.083+275.666C707.458+330.587+677.275+372.64+595.74+417.729C514.204+462.817+453.444+416.503+412.708+505.822C364.004+612.614+330.326+764.802+303.24+756.635C276.153+748.468+344.63+379.691+509.646+233.885C526.058+219.384+547.023+213.924+568.646+214.541ZM566.021+275.041C535.637+276.128+498.43+306.589+509.521+337.947C516.695+358.231+557.49+360.822+557.49+360.822C596.325+359.654+598.832+340.909+600.271+332.541C603.777+312.155+603.168+278.381+571.99+275.229C570.041+275.032+568.046+274.969+566.021+275.041ZM507.896+177.118C321.191+177.118+169.833+328.475+169.833+515.18C169.833+701.885+312.407+865.574+499.104+863.866C669.107+862.31+617.768+808.737+544.196+725.3C528.125+707.075+465.491+613.177+504.574+621.291C529.488+626.464+623.702+756.001+627.503+724.384C631.304+692.768+496.735+580.732+534.76+562.252C572.056+544.125+601.606+634.507+634.236+639.959C661.2+644.464+581.69+552.776+648.884+562.689C716.077+572.602+748.513+672.604+771.638+654.423C793.353+637.351+709.041+576.463+728.469+556.339C749.936+534.103+786.754+618.765+812.532+613.932C841.793+608.447+786.048+536.175+825.296+525.318C839.004+521.527+857.773+579.076+866.761+570.887C885.971+553.387+849.427+470.49+841.386+434.951C810.865+300.07+694.601+177.118+507.896+177.118Z" opacity="1"/>
-<path d="M503.809+319.776C503.809+289.365+528.462+264.712+558.874+264.712C589.285+264.712+613.938+289.365+613.938+319.776C613.938+350.187+589.285+374.84+558.874+374.84C528.462+374.84+503.809+350.187+503.809+319.776Z" opacity="1" fill="url(#RadialGradient_2)"/>
+<g opacity="1">
+<path fill="url(#LinearGradient)" opacity="1" d="M556.968+266.543C526.584+267.63+489.377+298.092+500.468+329.45C507.642+349.734+548.437+352.325+548.437+352.325C587.272+351.156+589.779+332.411+591.218+324.043C594.724+303.657+594.115+269.883+562.937+266.731C560.988+266.534+558.993+266.471+556.968+266.543ZM498.843+168.62C312.138+168.62+160.781+319.977+160.781+506.682C160.781+693.387+303.354+857.075+490.051+855.367C660.054+853.812+608.715+800.238+535.143+716.802C519.072+698.576+456.439+604.678+495.522+612.793C520.435+617.965+614.649+747.502+618.45+715.886C622.251+684.269+487.682+572.234+525.707+553.753C563.003+535.627+592.554+626.009+625.183+631.461C652.147+635.966+572.638+544.278+639.831+554.191C707.024+564.103+739.46+664.106+762.585+645.925C784.3+628.852+699.988+567.964+719.416+547.841C740.883+525.605+777.7+610.266+803.478+605.434C832.74+599.948+776.995+527.677+816.243+516.82C829.951+513.029+848.719+570.578+857.708+562.389C876.918+544.889+840.374+461.992+832.332+426.453C801.812+291.572+685.548+168.62+498.843+168.62ZM559.593+206.044C607.162+207.402+658.107+238.176+672.03+267.168C698.405+322.089+668.222+364.142+586.687+409.231C505.151+454.319+444.391+408.005+403.656+497.324C354.952+604.116+321.274+756.303+294.187+748.136C267.101+739.969+335.578+371.193+500.593+225.387C517.005+210.886+537.97+205.426+559.593+206.044Z"/>
+<path opacity="1" d="M491.859+311.278C491.859+280.867+516.512+256.214+546.923+256.214C577.334+256.214+601.987+280.867+601.987+311.278C601.987+341.689+577.334+366.342+546.923+366.342C516.512+366.342+491.859+341.689+491.859+311.278Z" fill="#000000"/>
+</g>
 </g>
 </svg>
