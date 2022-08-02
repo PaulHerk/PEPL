@@ -3,21 +3,5 @@
 version = 3
 
 [[package]]
-name = "ascii_converter"
-version = "0.3.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a73cd7fe90cd95612f7486889bbe1110689e03f745d9ceac276d4cfe6c4574e9"
-
-[[package]]
-name = "hex"
-version = "0.4.3"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7f24254aa9a54b5c858eaee2f5bccdb46aaf0e486a595ed5fd8f86ba55232a70"
-
-[[package]]
 name = "pepl"
-version = "0.1.0"
-dependencies = [
- "ascii_converter",
- "hex",
-]
+version = "0.0.5"

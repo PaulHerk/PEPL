@@ -1,274 +1,195 @@
 pub(crate) mod types;
 
-use ascii_converter::{
-    binary_to_string, decimals_to_string, hexadecimal_to_decimal, hexadecimal_to_string,
-};
-
-pub use crate::lexer::types::{break_items, TokenKind};
+pub use crate::lexer::types::*;
+#[derive(Debug)]
 pub struct Token {
-    pub kind: TokenKind,
-    pub literal: String,
-    pub tack: String,
-    pub extra: String,
-    pub reference: bool,
+    token_kind: TokenKind,
+    literal: String,
+    values: Vec<ValueKind>,
 }
 
 impl Token {
-    pub fn new_token(
-        kind: TokenKind,
-        literal: String,
-        tack: String,
-        extra: String,
-        reference: bool,
-    ) -> Self {
+    pub fn new_token(token_kind: TokenKind, literal: String) -> Self {
         Self {
-            kind,
+            token_kind,
             literal,
-            tack,
-            extra,
-            reference,
+            values: Vec::new(),
         }
     }
 }
 
 pub struct Lexer {
-    contents: Vec<char>,
-    position_counter: usize,
+    contents: String,
+    position_counter: u32,
 }
 
 impl Lexer {
     pub fn new_lexer(contents: String) -> Self {
         Self {
-            contents: contents.chars().collect(),
+            contents,
             position_counter: 0,
         }
     }
-
     pub fn lex(&mut self) -> Vec<Token> {
-        //goes through every character and checks if it fits into the pepl language
         let mut tokens: Vec<Token> = Vec::new();
-        while self.position_counter < self.contents.len() {
-            let current_char: char = self.current_char();
-            match current_char {
-                // -----------------------------------------------
-                //                     !
-                // -----------------------------------------------
-                '!' => {
-                    self.position_counter += 1;
-                    let operation: char = self.current_char();
-                    let tack_bin: String = self.get_tack_bin();
-                    match operation {
-                        '+' => match self.current_char() {
-                            '\\' => tokens.push(Token::new_token(
-                                TokenKind::NewTack,
-                                "!+".to_owned(),
-                                tack_bin,
-                                String::new(),
-                                self.check_if_reference(),
-                            )),
-                            '+' => tokens.push(Token::new_token(
-                                TokenKind::NewItem,
-                                "!++".to_owned(),
-                                tack_bin,
-                                self.get_item_hex(),
-                                self.check_if_reference(),
-                            )),
-                            _ => (),
-                        },
-                        '-' => match self.current_char() {
-                            '\\' => tokens.push(Token::new_token(
-                                TokenKind::DelItem,
-                                "!-".to_owned(),
-                                tack_bin,
-                                String::new(),
-                                self.check_if_reference(),
-                            )),
-                            _ => (),
-                        },
-                        _ => (),
-                    };
-                }
-                // -----------------------------------------------
-                //                  CREMENT
-                // -----------------------------------------------
-                '+' => {
-                    tokens.push(Token::new_token(
-                        TokenKind::Increase,
-                        "+".to_owned(),
-                        self.get_tack_bin(),
-                        String::new(),
-                        self.check_if_reference(),
-                    ));
-                }
-                '-' => {
-                    tokens.push(Token::new_token(
-                        TokenKind::Decrease,
-                        "-".to_owned(),
-                        self.get_tack_bin(),
-                        String::new(),
-                        self.check_if_reference(),
-                    ));
-                }
-                // -----------------------------------------------
-                //                     I/O
-                // -----------------------------------------------
-                ',' => {
-                    let tack_bin: String = self.get_tack_bin();
-                    if self.current_char() == '>' {
-                        tokens.push(Token::new_token(
-                            TokenKind::Output,
-                            ",>".to_owned(),
-                            tack_bin,
-                            String::new(),
-                            self.check_if_reference(),
-                        ));
-                    } else if self.current_char() == '<' {
-                        tokens.push(Token::new_token(
-                            TokenKind::Input,
-                            ",<".to_owned(),
-                            tack_bin,
-                            String::new(),
-                            self.check_if_reference(),
-                        ));
+
+        loop {
+            let mut values: Vec<(String, bool)> = Vec::new();
+            let literal = self.get_whole_literal();
+            let mut bare_literal = String::new(); //like !++ instead of for example !+10+&1
+            let mut token_kind: TokenKind;
+            let mut values_with_kind: Vec<ValueKind> = Vec::new();
+
+            for (index, &current_char) in literal.iter().enumerate() {
+                if COMMAND_CHARACTERS.contains(&current_char) {
+                    bare_literal.push(current_char);
+                    let next_char = literal[index + 1];
+                    if literal[index + 1] == '&' || POSSIBLE_VALUES.contains(&next_char) {
+                        values.push((String::new(), false));
                     }
+                } else if current_char == '&' {
+                    values.last_mut().unwrap().1 = true;
+                } else if POSSIBLE_VALUES.contains(&current_char) {
+                    values.last_mut().unwrap().0.push(current_char);
+                } else if current_char == '\\' {
+                    break;
                 }
-                // -----------------------------------------------
-                //                  IF
-                // -----------------------------------------------
-                '?' => {
-                    let first_tack: String = self.get_tack_bin();
-                    if self.current_char() == ':' {
-                        let second_tack: String = self.get_tack_bin();
-                        tokens.push(Token::new_token(
-                            TokenKind::BeginIf,
-                            "?:".to_owned(),
-                            first_tack,
-                            second_tack,
-                            self.check_if_reference(),
-                        ));
-                    } else if self.current_char() == '|' {
-                        tokens.push(Token::new_token(
-                            TokenKind::EndIf,
-                            "?|".to_owned(),
-                            String::new(),
-                            String::new(),
-                            false,
-                        ));
-                    } else {
-                        panic!("Wrong syntax!")
-                    }
-                }
-                ':' => {
-                    self.position_counter += 1;
-                    if self.current_char() == '?' {
-                        tokens.push(Token::new_token(
-                            TokenKind::Else,
-                            "?:".to_owned(),
-                            String::new(),
-                            String::new(),
-                            false,
-                        ));
-                    } else {
-                        break;
-                    }
-                }
-                // -----------------------------------------------
-                //                  FOR LOOP
-                // -----------------------------------------------
-                '>' => {
-                    let tag_dec: String = self.get_tag_dec();
-                    tokens.push(Token::new_token(
-                        TokenKind::StartLoop,
-                        ">".to_owned(),
-                        String::new(),
-                        tag_dec,
-                        self.check_if_reference(),
-                    ))
-                }
-                '<' => {
-                    let tag_dec: String = self.get_tag_dec();
-                    tokens.push(Token::new_token(
-                        TokenKind::EndLoop,
-                        "<".to_owned(),
-                        String::new(),
-                        tag_dec,
-                        self.check_if_reference(),
-                    ))
-                }
-                _ => (),
             }
-            self.position_counter += 1;
+
+            (token_kind, values_with_kind) = match bare_literal.as_str() {
+                "!+" => (
+                    TokenKind::NewTack,
+                    vec![ValueKind::Bin {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                "!++" => (
+                    TokenKind::NewItem,
+                    vec![
+                        ValueKind::Bin {
+                            value: values.first().unwrap().0.as_str().to_string(),
+                            is_reference: values.first().unwrap().1,
+                        },
+                        ValueKind::Hex {
+                            value: values.last().unwrap().0.as_str().to_string(),
+                            is_reference: values.last().unwrap().1,
+                        },
+                    ],
+                ),
+                "!-" => (
+                    TokenKind::DelItem,
+                    vec![ValueKind::Bin {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                "+" => (
+                    TokenKind::Increase,
+                    vec![ValueKind::Bin {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                "-" => (
+                    TokenKind::Decrease,
+                    vec![ValueKind::Bin {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                ",>" => (
+                    TokenKind::Output,
+                    vec![ValueKind::Bin {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                ",<" => (
+                    TokenKind::Input,
+                    vec![ValueKind::Bin {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                "?:" => (
+                    TokenKind::BeginIf,
+                    vec![
+                        ValueKind::Bin {
+                            value: values.first().unwrap().0.as_str().to_string(),
+                            is_reference: values.first().unwrap().1,
+                        },
+                        ValueKind::Bin {
+                            value: values.last().unwrap().0.as_str().to_string(),
+                            is_reference: values.last().unwrap().1,
+                        },
+                    ],
+                ),
+                ":?" => (
+                    TokenKind::ReverseIf,
+                    vec![
+                        ValueKind::Bin {
+                            value: values.first().unwrap().0.as_str().to_string(),
+                            is_reference: values.first().unwrap().1,
+                        },
+                        ValueKind::Bin {
+                            value: values.last().unwrap().0.as_str().to_string(),
+                            is_reference: values.last().unwrap().1,
+                        },
+                    ],
+                ),
+                "?|" => (TokenKind::EndIf, Vec::new()),
+                ">" => (
+                    TokenKind::StartLoop,
+                    vec![ValueKind::Dec {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                "<" => (
+                    TokenKind::EndLoop,
+                    vec![ValueKind::Dec {
+                        value: values.first().unwrap().0.as_str().to_string(),
+                        is_reference: values.first().unwrap().1,
+                    }],
+                ),
+                _ => panic!(),
+            };
+            let literal = literal.into_iter().collect();
+
+            tokens.push(Token {
+                token_kind,
+                literal,
+                values: values_with_kind,
+            });
+
+            if self.position_counter == self.contents.len().try_into().unwrap() {
+                break;
+            }
+            // tokens.push(Token::new_token(todo!(), whole_literal.iter().collect()));
         }
         tokens
     }
 
     fn current_char(&self) -> char {
-        self.contents[self.position_counter]
+        self.contents
+            .chars()
+            .nth(self.position_counter.try_into().unwrap())
+            .unwrap()
+            .to_ascii_lowercase() //since people write in hex sometimes "abcdef" sometimes "ABCDEF"
     }
 
-    fn check_if_reference(&mut self) -> bool {
-        self.position_counter += 1;
-        let current_char: char = self.current_char();
-        if current_char == '&' {
-            true
-        } else {
-            self.position_counter -= 1;
-            false
-        }
-    }
-
-    fn get_tack_bin(&mut self) -> String {
-        let bin: [char; 2] = ['0', '1'];
-        let mut bin_num: String = String::new();
+    fn get_whole_literal(&mut self) -> Vec<char> {
+        let mut literal: Vec<char> = Vec::new();
         loop {
+            let current_char = self.current_char();
             self.position_counter += 1;
-            let current_char: char = self.current_char();
-            if bin.contains(&current_char) {
-                bin_num.push(current_char);
-            }
-            if break_items().contains(&current_char) {
-                break;
-            }
-        }
-        binary_to_string(&vec![bin_num.parse().unwrap()]).unwrap()
-    }
-
-    fn get_tag_dec(&mut self) -> String {
-        let dec: [char; 10] = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-        let mut dec_num: String = String::new();
-        let mut current_char: char;
-        loop {
-            self.position_counter += 1;
-            current_char = self.current_char();
-            if dec.contains(&current_char) {
-                dec_num.push(current_char);
-            }
-            if break_items().contains(&current_char) {
-                break;
+            if current_char != '\\' && current_char != '\n' {
+                literal.push(current_char);
+            } else if current_char == '\\' {
+                literal.push(current_char);
+                return literal;
             }
         }
-        decimals_to_string(&vec![dec_num.parse().unwrap()]).unwrap()
-    }
-
-    fn get_item_hex(&mut self) -> String {
-        let hex: [char; 16] = [
-            '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F',
-        ];
-        let mut hex_num = String::new();
-        let mut current_char: char;
-        loop {
-            self.position_counter += 1;
-            current_char = self.current_char();
-            if hex.contains(&current_char) {
-                hex_num.push(current_char);
-            }
-            if break_items().contains(&current_char) {
-                break;
-            }
-        }
-        if hex_num.len() > 2 {
-            panic!("Only 255 possibilities allowed!");
-        }
-        hexadecimal_to_string(&vec![hex_num]).unwrap()
     }
 }
