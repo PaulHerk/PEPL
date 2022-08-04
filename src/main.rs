@@ -1,7 +1,8 @@
 use std::fs;
-// mod interpreter;
+mod converter;
+mod interpreter;
 mod lexer;
-// use interpreter::Interpreter;
+use interpreter::Interpreter;
 
 pub use crate::lexer::Lexer;
 
