@@ -6,7 +6,7 @@
 
 ***History Time :DD***
 
-Few weeks ago, I discovered rust and really got into it. While I also programmed with some esoteric languages (I programmed Brainf\*ck on our schools calculator... 😶). So I had the idea to make my own one (firstly as a joke, then kinda serious). And here it is.
+Few weeks ago, I discovered rust and really got into it. Because I also programmed with some esoteric languages (I programmed Brainf\*ck on our schools calculator... 😶), I got the idea to make my own one (firstly as a joke, then kinda serious). And here it comes.
 
 ***Version 0.05 (Lexer unoptimized but working)***
 even 0.05 is too much probably 😭
