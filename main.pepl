@@ -1,27 +1,34 @@
-!+&0\
+!+0\
 !+0+34\
 !+1\
 ,1<\
 !+10\
-!+10+7A\
+!+10+61\
 !+10+69\
 !+10+48\
 !+11\
-!+11+61\
+!+11+7B\
+
+!+100\
+!+100+85\
 
 ?0:1\
  ,10>\
  !-10\
  ,10>\
-:0?1\
+:?\
  !-10\
  !-10\
- >0\
+ >\
   ,10>\
-  -10\
+  +10\
   ?10:11\
    <0\
   ?|\
+ <\
 ?|\
 
-(This is a demonstration of the language)
+,100>\
+,1>\
+
+`This is a demonstration of the language, try out to figure out what it does ;) *or just do cargo r :(*`

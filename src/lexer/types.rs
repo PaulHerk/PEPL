@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum TokenKind {
     NewTack,
     NewItem,
@@ -7,18 +7,35 @@ pub enum TokenKind {
     Decrease,
     Output,
     Input,
-    BeginIf,
-    ReverseIf,
-    EndIf,
-    StartLoop,
-    EndLoop,
+    BeginIf(u32),
+    Else(u32),
+    EndIf(u32),
+    StartLoop(u32),
+    BreakLoop(Option<u32>),
+    Comment,
+}
+#[derive(Debug)]
+pub struct Value {
+    pub value_kind: ValueKind,
+    pub is_reference: bool,
+    pub value: String,
 }
 
 #[derive(Debug)]
 pub enum ValueKind {
-    Hex { value: String, is_reference: bool },
-    Dec { value: String, is_reference: bool },
-    Bin { value: String, is_reference: bool },
+    Hex,
+    Dec,
+    Bin,
+}
+
+impl Value {
+    pub fn new_value(value_kind: ValueKind, is_reference: bool, value: String) -> Self {
+        Self {
+            value_kind,
+            is_reference,
+            value,
+        }
+    }
 }
 
 pub const COMMAND_CHARACTERS: [char; 9] = ['!', '+', '-', '<', '>', '?', '|', ':', ','];
