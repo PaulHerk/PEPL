@@ -60,7 +60,7 @@ impl Interpreter {
                 TokenKind::Output => {
                     let key = self.get_item(current_token, 0);
                     if let Some(tack) = self.tacks.get(&key) {
-                        print!("{}", char::from_u32(*tack.last().unwrap()).unwrap())
+                        print!("{}", char::from_u32(*tack.last().unwrap()).unwrap());
                     }
                 }
                 TokenKind::Input => {
