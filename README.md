@@ -1,5 +1,4 @@
-<h1>PEPL</h1>
-<img src="icon.svg" width="30%">
+![github_preview](https://user-images.githubusercontent.com/79471967/183104034-0afc44fc-163e-4486-baad-b387b06d7b76.png)
 <hr>
 
 <h2>Paul's esoteric programming language</h2>
