@@ -3,9 +3,9 @@ pub(crate) mod types;
 pub use crate::lexer::types::*;
 #[derive(Debug)]
 pub struct Token {
-    token_kind: TokenKind,
+    pub token_kind: TokenKind,
     literal: String,
-    values: Vec<Value>,
+    pub values: Vec<Value>,
 }
 
 impl Token {
@@ -32,13 +32,13 @@ impl Lexer {
     }
     pub fn lex(&mut self) -> Vec<Token> {
         let mut tokens: Vec<Token> = Vec::new();
+        let mut if_loop_indexes: u32 = 0; // since you don't have curly brackets I have to put an index to that
+        let mut loop_indexes: u32 = 0; // for normal loop; same as above
 
         loop {
             let mut values: Vec<(String, bool)> = Vec::new();
             let literal = self.get_whole_literal();
             let mut bare_literal = String::new(); //like !++ instead of for example !+10+&1
-            let mut token_kind: TokenKind;
-            let mut value_kind: Vec<ValueKind> = Vec::new();
 
             for (index, &current_char) in literal.iter().enumerate() {
                 if COMMAND_CHARACTERS.contains(&current_char) {
@@ -56,7 +56,7 @@ impl Lexer {
                 }
             }
 
-            (token_kind, value_kind) = match bare_literal.as_str() {
+            let (token_kind, value_kind) = match bare_literal.as_str() {
                 "!+" => (TokenKind::NewTack, vec![ValueKind::Bin]),
                 "!++" => (TokenKind::NewItem, vec![ValueKind::Bin, ValueKind::Hex]),
                 "!-" => (TokenKind::DelItem, vec![ValueKind::Bin]),
@@ -64,12 +64,31 @@ impl Lexer {
                 "-" => (TokenKind::Decrease, vec![ValueKind::Bin]),
                 ",>" => (TokenKind::Output, vec![ValueKind::Bin]),
                 ",<" => (TokenKind::Input, vec![ValueKind::Bin]),
-                "?:" => (TokenKind::BeginIf, vec![ValueKind::Bin, ValueKind::Bin]),
-                ":?" => (TokenKind::ReverseIf, vec![ValueKind::Bin, ValueKind::Bin]),
-                "?|" => (TokenKind::EndIf, Vec::new()),
-                ">" => (TokenKind::StartLoop, vec![ValueKind::Dec]),
-                "<" => (TokenKind::EndLoop, vec![ValueKind::Dec]),
-                _ => panic!(), // TODO: Error (wrong Token)
+                "?:" => {
+                    if_loop_indexes += 1;
+                    (
+                        TokenKind::BeginIf(if_loop_indexes - 1),
+                        vec![ValueKind::Bin, ValueKind::Bin],
+                    )
+                }
+                ":?" => (TokenKind::Else(if_loop_indexes - 1), vec![]),
+                "?|" => {
+                    if_loop_indexes -= 1;
+                    (TokenKind::EndIf(if_loop_indexes), vec![])
+                }
+                ">" => {
+                    loop_indexes += 1;
+                    (TokenKind::StartLoop(loop_indexes - 1), vec![])
+                }
+                "<" => {
+                    if values.is_empty() {
+                        loop_indexes -= 1;
+                        (TokenKind::BreakLoop(Some(loop_indexes)), vec![])
+                    } else {
+                        (TokenKind::BreakLoop(None), vec![ValueKind::Dec])
+                    }
+                }
+                _ => (TokenKind::Comment, vec![]),
             };
             let literal = literal.into_iter().collect();
 
@@ -83,9 +102,6 @@ impl Lexer {
                     value,
                 ));
             }
-
-            // value: values.first().unwrap().0.as_str().to_string(),
-            // is_reference: values.first().unwrap().1,
 
             tokens.push(Token {
                 token_kind,
@@ -110,14 +126,22 @@ impl Lexer {
 
     fn get_whole_literal(&mut self) -> Vec<char> {
         let mut literal: Vec<char> = Vec::new();
+        let mut is_command = false;
         loop {
             let current_char = self.current_char();
             self.position_counter += 1;
-            if current_char != '\\' && current_char != '\n' && current_char != ' ' {
+            if current_char == '`' {
+                is_command = !is_command;
+                if !is_command {
+                    return Vec::new();
+                }
+            } else if current_char != '\\' && current_char != '\n' && current_char != ' ' {
                 literal.push(current_char);
             } else if current_char == '\\' {
                 literal.push(current_char);
                 return literal;
+            } else if current_char == '\n' {
+                return Vec::new();
             }
         }
     }
