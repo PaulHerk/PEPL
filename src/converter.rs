@@ -1,4 +1,5 @@
-pub fn encode(mut value: u32, base: String) -> String {
+use crate::interpreter::ErrorkindOnInterpreter;
+pub fn encode(mut value: u32, base: String) -> Result<String, ErrorkindOnInterpreter> {
     // dec -> ?
     let mut encoded_vec: String = String::new();
     loop {
@@ -14,20 +15,25 @@ pub fn encode(mut value: u32, base: String) -> String {
         value = quotient;
     }
 
-    encoded_vec.chars().rev().collect::<String>()
+    Ok(encoded_vec.chars().rev().collect::<String>())
 }
 
 //
 
-pub fn decode(mut value: String, base: String) -> u32 {
+pub fn decode(mut value: String, base: String) -> Result<u32, ErrorkindOnInterpreter> {
     // ? -> dec
     let mut decoded_num: u32 = 0;
     value = value.chars().rev().collect::<String>();
     for (index, current_char) in value.chars().enumerate() {
-        let multiplier = base.find(current_char).unwrap() as u32; // TODO: if not unwrap -> decoding error ('r' in hex for example)
-        decoded_num += (base.len() as u32).pow(index as u32) * multiplier;
+        let multiplier = base.find(current_char); // TODO: if not unwrap -> decoding error ('r' in hex for example)
+        match multiplier {
+            Some(multiplier) => {
+                decoded_num += (base.len() as u32).pow(index as u32) * multiplier as u32
+            }
+            None => return Err(ErrorkindOnInterpreter::InvalidNumber),
+        }
     }
-    decoded_num
+    Ok(decoded_num)
 }
 
 // I use decimal since in the interpreter everything is decimal again
