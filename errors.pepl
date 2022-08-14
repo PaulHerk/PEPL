@@ -1,0 +1,17 @@
+ !++3\ `no item`
+ !+3+\ `also not working`
+`-------------------------`
+
+!+0\
+ ?3:0\ `Tack and item not found`
+`-------------------------`
+
+ !+0+3G\ `Invalid number`
+`-------------------------`
+
+ ?>.3\ `no token like this in existence`
+`-------------------------`
+
+
+`And More!`
+`This is an example of some possible errors.`

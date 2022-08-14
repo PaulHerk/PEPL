@@ -1,4 +1,4 @@
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone, Copy)]
 pub enum TokenKind {
     NewTack,
     NewItem,
@@ -12,7 +12,6 @@ pub enum TokenKind {
     EndIf(u32),
     StartLoop(u32),
     BreakLoop(Option<u32>),
-    Comment,
 }
 #[derive(Debug)]
 pub struct Value {
@@ -39,7 +38,3 @@ impl Value {
 }
 
 pub const COMMAND_CHARACTERS: [char; 9] = ['!', '+', '-', '<', '>', '?', '|', ':', ','];
-
-pub const POSSIBLE_VALUES: [char; 16] = [
-    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f',
-];
