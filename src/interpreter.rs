@@ -16,8 +16,7 @@ pub struct Interpreter {
 
 impl Interpreter {
     pub fn interpret(mut self) -> Result<u8, ErrorOnInterpreter> {
-        let mut errors: Vec<ErrorOnInterpreter> = Vec::new();
-        'break_if_error: loop {
+        loop {
             if self.position_counter == self.tokens.len() as u32 {
                 break;
             }
@@ -27,18 +26,16 @@ impl Interpreter {
                 self.get_item(current_token, 0),
                 self.get_item(current_token, 1),
             );
-            let (mut key, mut value);
+
             if let Err(kind) = key_wrapped {
-                errors.push(ErrorOnInterpreter::new_error(kind, self.position_counter));
-                break 'break_if_error;
+                return Err(ErrorOnInterpreter::new_error(kind, self.position_counter));
             }
-            key = key_wrapped.unwrap();
+            let key = key_wrapped.unwrap();
 
             if let Err(kind) = value_wrapped {
-                errors.push(ErrorOnInterpreter::new_error(kind, self.position_counter));
-                break 'break_if_error;
+                return Err(ErrorOnInterpreter::new_error(kind, self.position_counter));
             }
-            value = value_wrapped.unwrap();
+            let value = value_wrapped.unwrap();
 
             match current_token.token_kind {
                 TokenKind::NewTack => {
@@ -131,11 +128,7 @@ impl Interpreter {
             }
             self.position_counter += 1;
         }
-        if errors.is_empty() {
-            Ok(0)
-        } else {
-            Err(*errors.first().unwrap())
-        }
+        Ok(0)
     }
 
     fn get_item(&self, token: &Token, value_index: u8) -> Result<u32, ErrorkindOnInterpreter> {
