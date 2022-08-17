@@ -3,6 +3,7 @@ pub enum ErrorkindOnInterpreter {
     TackNotFound,
     NoItemInTack,
     InvalidNumber,
+    NoSuchCharacter,
 }
 
 #[derive(Debug, Clone, Copy)]

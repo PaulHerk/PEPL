@@ -1,4 +1,6 @@
-use crate::interpreter::ErrorkindOnInterpreter;
+use crate::interpreter::{error::ErrorOnInterpreter, ErrorkindOnInterpreter};
+
+use super::Interpreter;
 pub fn encode(mut value: u32, base: String) -> Result<String, ErrorkindOnInterpreter> {
     // dec -> ?
     let mut encoded_vec: String = String::new();
@@ -10,30 +12,36 @@ pub fn encode(mut value: u32, base: String) -> Result<String, ErrorkindOnInterpr
         }
 
         let remainder = value % base.len() as u32;
-        encoded_vec.push(base.chars().nth(remainder.try_into().unwrap()).unwrap()); // TODO: if not unwrap -> encoding error
+        encoded_vec.push(base.chars().nth(remainder as usize).unwrap()); // TODO: if not unwrap -> encoding error
 
         value = quotient;
     }
 
     Ok(encoded_vec.chars().rev().collect::<String>())
 }
-
 //
 
-pub fn decode(mut value: String, base: String) -> Result<u32, ErrorkindOnInterpreter> {
-    // ? -> dec
-    let mut decoded_num: u32 = 0;
-    value = value.chars().rev().collect::<String>();
-    for (index, current_char) in value.chars().enumerate() {
-        let multiplier = base.find(current_char); // TODO: if not unwrap -> decoding error ('r' in hex for example)
-        match multiplier {
-            Some(multiplier) => {
-                decoded_num += (base.len() as u32).pow(index as u32) * multiplier as u32
+impl Interpreter {
+    pub fn decode(&self, mut value: String, base: String) -> Result<u32, ErrorOnInterpreter> {
+        // ? -> dec
+        let mut decoded_num: u32 = 0;
+        value = value.chars().rev().collect::<String>();
+        for (index, current_char) in value.chars().enumerate() {
+            let multiplier = base.find(current_char);
+            match multiplier {
+                Some(multiplier) => {
+                    decoded_num += (base.len() as u32).pow(index as u32) * multiplier as u32
+                }
+                None => {
+                    return Err(ErrorOnInterpreter::new_error(
+                        ErrorkindOnInterpreter::InvalidNumber,
+                        self.position_counter,
+                    ))
+                }
             }
-            None => return Err(ErrorkindOnInterpreter::InvalidNumber),
         }
+        Ok(decoded_num)
     }
-    Ok(decoded_num)
 }
 
 // I use decimal since in the interpreter everything is decimal again
