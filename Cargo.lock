@@ -31,7 +31,7 @@ checksum = "074864da206b4973b84eb91683020dbefd6a8c3f0f38e054d93954e891935e4e"
 
 [[package]]
 name = "pepl"
-version = "0.0.7"
+version = "0.0.8"
 dependencies = [
  "wasm-bindgen",
 ]

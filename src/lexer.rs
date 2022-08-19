@@ -1,10 +1,10 @@
-mod errors;
+pub mod errors;
 pub(crate) mod types;
 use std::str::Chars;
 
-use self::InvalidSyntaxKind::*;
 
 pub use crate::lexer::types::*;
+use self::ErrorkindOnLexer::*;
 
 use self::errors::*;
 #[derive(Debug)]
@@ -85,13 +85,13 @@ impl<'a> Lexer {
                 }
                 ":?" => {
                     if if_loop_indexes == 0 {
-                        return Err(ErrorOnLexer::new_invalid_syntax_error(NoOpeningIf, index));
+                        return Err(ErrorOnLexer::new_error(NoOpeningIf, index));
                     }
                     (TokenKind::Else(if_loop_indexes - 1), Vec::new())
                 }
                 "?|" => {
                     if if_loop_indexes == 0 {
-                        return Err(ErrorOnLexer::new_invalid_syntax_error(NoOpeningIf, index));
+                        return Err(ErrorOnLexer::new_error(NoOpeningIf, index));
                     }
                     if_loop_indexes -= 1;
                     (TokenKind::EndIf(if_loop_indexes), Vec::new())
@@ -103,7 +103,7 @@ impl<'a> Lexer {
                 "<" => {
                     if values.is_empty() {
                         if loop_indexes == 0 {
-                            return Err(ErrorOnLexer::new_invalid_syntax_error(
+                            return Err(ErrorOnLexer::new_error(
                                 NoOpeningLoop,
                                 index,
                             ));
@@ -115,7 +115,7 @@ impl<'a> Lexer {
                     }
                 }
                 "" => {
-                    return Err(ErrorOnLexer::new_invalid_syntax_error(
+                    return Err(ErrorOnLexer::new_error(
                         BackslashAfterLastCommand,
                         index,
                     ));
@@ -137,7 +137,7 @@ impl<'a> Lexer {
                 let (is_reference, value) = match values.get(index) {
                     Some(values) => (values.1, values.0.as_str().to_string()),
                     None => {
-                        return Err(ErrorOnLexer::new_invalid_syntax_error(NoValuePut, index));
+                        return Err(ErrorOnLexer::new_error(NoValuePut, index));
                     }
                 };
 
@@ -154,12 +154,12 @@ impl<'a> Lexer {
             });
         }
         if loop_indexes != 0 {
-            return Err(ErrorOnLexer::new_invalid_syntax_error(
+            return Err(ErrorOnLexer::new_error(
                 NoClosingLoop,
                 loop_indexes as usize,
             ));
         } else if if_loop_indexes != 0 {
-            return Err(ErrorOnLexer::new_invalid_syntax_error(
+            return Err(ErrorOnLexer::new_error(
                 NoEndOrElseIf,
                 loop_indexes as usize,
             ));

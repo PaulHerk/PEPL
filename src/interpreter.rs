@@ -1,9 +1,16 @@
+use wasm_bindgen::prelude::*;
+
+#[wasm_bindgen]
+extern "C" {
+    pub fn prompt(s: &str) -> String;
+    pub fn alert(s: &str);
+}
+
 pub(crate) mod error;
 pub use crate::interpreter::error::*;
 use crate::lexer::*;
 
 use std::collections::HashMap;
-use std::io::stdin;
 
 use self::error::ErrorOnInterpreter;
 use crate::options::Options;
@@ -15,10 +22,11 @@ pub struct Interpreter {
 }
 
 impl Interpreter {
-    pub fn interpret(mut self, options: Options) -> Result<u8, ErrorOnInterpreter> {
+    pub fn interpret(mut self, options: Options) -> Result<String, ErrorOnInterpreter> {
+        let mut output = String::new();
         loop {
             if options.debug {
-                println!("{:?}", self.tacks)
+                alert(&format!("{:?}", self.tacks))
             }
 
             if self.position_counter == self.tokens.len() as u32 {
@@ -74,11 +82,10 @@ impl Interpreter {
                             ))
                         }
                     };
-                    print!("{}", character);
+                    output.push(character);
                 }
                 TokenKind::Input => {
-                    let mut input = String::new();
-                    stdin().read_line(&mut input).unwrap(); // TODO: change input
+                    let input = prompt("your input:");
                     let input_unicode = input.chars().nth(0).unwrap() as u32; // this decodes a char into unicode
 
                     if let Some(tack) = self.tacks.get_mut(&key) {
@@ -135,7 +142,10 @@ impl Interpreter {
             }
             self.position_counter += 1;
         }
-        Ok(0)
+        if output == "" {
+            output = "*No Output*".to_owned()
+        }
+        Ok(output)
     }
 
     fn get_tack_mut(&mut self, key: u32) -> Result<&mut Vec<u32>, ErrorOnInterpreter> {

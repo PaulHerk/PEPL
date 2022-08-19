@@ -1,28 +1,8 @@
 use std::fs;
-mod converter;
-mod interpreter;
-mod lexer;
-mod options;
-
-use options::Options;
-
-use crate::{interpreter::Interpreter, lexer::Lexer};
-
 fn main() {
-    let file_content = fs::read_to_string("errors.pepl").expect("No valid file");
-    let mut lexer = Lexer::new_lexer(file_content.chars()); // using Chars bc they are slightly faster :)
-    let lexer = lexer.lex();
-    match lexer {
-        Ok(lexer) => {
-            // println!("{:?}", lexer);
-            let interpreter = Interpreter::new_interpreter(lexer);
-            match interpreter.interpret(Options { debug: true }) {
-                Err(error) => println!("{:?}", error),
-                _ => (),
-            }
-        }
-        Err(error) => {
-            println!("{:?}", error);
-        }
-    }
+    let file = fs::read_to_string("pkg/pepl.js").unwrap();
+    match fs::write("pkg/pepl.js", format!("/* eslint-disable @next/next/no-assign-module-variable */\n{}", file)) {
+        Ok(_) => (),
+        Err(error) => println!("{:?}", error)
+    } // I am a perfectionist so pls let me do this :D (it would still work if I wouldn't)
 }

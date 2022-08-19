@@ -13,6 +13,7 @@ pub enum TokenKind {
     StartLoop(u32),
     BreakLoop(Option<u32>),
 }
+
 #[derive(Debug)]
 pub struct Value {
     pub value_kind: ValueKind,

@@ -1,4 +1,6 @@
+use wasm_bindgen::prelude::wasm_bindgen;
 #[derive(Debug, Clone, Copy)]
+#[wasm_bindgen]
 pub enum ErrorkindOnInterpreter {
     TackNotFound,
     NoItemInTack,
@@ -6,14 +8,15 @@ pub enum ErrorkindOnInterpreter {
     NoSuchCharacter,
 }
 
+#[wasm_bindgen]
 #[derive(Debug, Clone, Copy)]
 pub struct ErrorOnInterpreter {
     pub kind: ErrorkindOnInterpreter,
-    pub token_index: u32,
+    pub position: u32,
 }
 
 impl ErrorOnInterpreter {
-    pub fn new_error(kind: ErrorkindOnInterpreter, token_index: u32) -> Self {
-        Self { kind, token_index }
+    pub fn new_error(kind: ErrorkindOnInterpreter, position: u32) -> Self {
+        Self { kind, position }
     }
 }

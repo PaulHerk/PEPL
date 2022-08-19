@@ -1,8 +1,15 @@
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = false
+
 [package]
 name = "pepl"
-version = "0.0.7"
+version = "0.0.8"
 edition = "2021"
 repository = "https://github.com/Kaenigsion/PEPL"
+
+[profile.release]
+lto = true
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
