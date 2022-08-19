@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build_wasm": "curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && wasm-pack build --target web && cargo r",
+    "build_wasm": "curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh && curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh && wasm-pack build --target web && cargo r",
     "dev": "next dev",
     "build": "npm run build_wasm && next build",
     "start": "next start",
