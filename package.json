@@ -3,10 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "install_rust": "curl https://sh.rustup.rs -sSf | sh -s -- -y && rustup -V",
-    "build_wasm": "npm run install_rust -y && wasm-pack build --target web && cargo r",
+    "build_wasm": "wasm-pack build --target web && cargo r && wasm-opt -O -o pkg/pepl_bg.wasm pkg/pepl_bg.wasm",
     "dev": "next dev",
-    "build": "npm run build_wasm && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
