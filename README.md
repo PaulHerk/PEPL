@@ -6,7 +6,7 @@
 
 ## Demo
 You can get a first demo here:
-**<a href="https://pepl-ek741euil-kaenigsion.vercel.app/demo" target="_blank">PEPL online code editor</a>**
+**<a href="https://pepl.vercel.app/demo" target="_blank">PEPL online code editor</a>**
 
 ## History Time :DD
 
