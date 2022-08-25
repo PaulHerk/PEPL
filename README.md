@@ -1,7 +1,7 @@
 ![pepl-logo-inverted](https://user-images.githubusercontent.com/79471967/185637048-2f63b943-9fa4-4b1e-b2af-894ef3621038.svg)
 
 <div align="center">
-  <h1> Paul's esoteric programming language </h1>
+  <h1> Paul's Esoteric Programming Language </h1>
 </div>
 
 ## Demo
